@@ -1,0 +1,8 @@
+controller_list:
+  - name: fake_arm_ctrl_controller
+    joints:
+      - J0
+      - J1
+      - J2
+      - J3
+      - J4

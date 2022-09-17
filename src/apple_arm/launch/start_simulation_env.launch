@@ -1,0 +1,23 @@
+<launch>
+    <!--Automatically start ROS core-->
+    <master auto="start"/>
+    <!--配置并启动机械臂空间姿态-->
+    <param name="robot_description" textfile="$(find arm_descript)/arm.urdf"/>
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" >
+        <rosparam param="source_list">[arm_joints]</rosparam>
+        <param name="use_gui" value="true"/>
+	</node>
+    <!--控制台APP-->
+    <node name='panel' pkg='app' type='panel.py'/>
+    <!--机械臂空间姿态解算-->
+    <node name='pos_ctrl' pkg='apple_arm' type='pos_ctrl.py'/>
+    <!--机械臂基础空间运动-->
+    <node name='movement_ctrl' pkg='apple_arm' type='movement_ctrl.py'/>
+    <!--机械臂抓取目标流程-->
+    <node name='app_catch' pkg='app' type='catch_app.py'/>
+    <!--打开RVIZ-->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find learn_moveit)/rviz.rviz"/>
+    <!--连接到真实机械臂-->
+    <node name="arm_serial" type="arm_serial.py" pkg="apple_arm" output="screen"/>
+</launch>
